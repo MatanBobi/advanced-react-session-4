@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { matchSorter } from "match-sorter";
 import { Header } from "./Header";
 import { PokemonItem } from "./PokemonItem";
 import { Pokemon } from "./types";
 import { useNetworkStatus } from "./useNetworkStatus";
-import { withLoader } from "./withLoader";
-import { useForceRerender } from "./useForceRerender";
 
-export function PokemonsContainer({
-  data: { results: pokemons },
-}: {
-  data: { results: Pokemon[] };
-}) {
+export function PokemonsContainer() {
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [caughtPokemons, setCaughtPokemons] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { isOnline } = useNetworkStatus();
-  const forceRerender = useForceRerender();
+
+  useEffect(() => {
+    async function getPokemons() {
+      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+      const data = await res.json();
+      setPokemons(data.results);
+    }
+
+    getPokemons();
+  }, []);
 
   const visiblePokemons = React.useMemo(() => {
     return pokemons.length
@@ -47,7 +51,6 @@ export function PokemonsContainer({
         pokemonsLength={pokemons.length}
         searchTerm={searchTerm}
         onChangeSearch={setSearchTerm}
-        forceRerender={forceRerender}
       />
       <>
         {visiblePokemons.map((pokemon) => {
@@ -56,7 +59,6 @@ export function PokemonsContainer({
               key={pokemon.name}
               pokemon={pokemon}
               onChange={handlePokemonCaught}
-              disabled={!isOnline}
               isCaught={caughtPokemons.includes(pokemon)}
             />
           );
@@ -74,8 +76,3 @@ export function PokemonsContainer({
     </div>
   );
 }
-
-export const PokemonsContainerWithLoader = withLoader(
-  PokemonsContainer,
-  "https://pokeapi.co/api/v2/pokemon?limit=10"
-);

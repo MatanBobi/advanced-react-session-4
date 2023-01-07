@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-export function PokemonModal({ pokemonId }: { pokemonId: string }) {
+export function PokemonPage() {
+  const { pokemonId } = useParams<{ pokemonId: string }>();
   const [pokemonDetails, setPokemonDetails] = useState<any>();
 
   useEffect(() => {
@@ -12,8 +14,8 @@ export function PokemonModal({ pokemonId }: { pokemonId: string }) {
   }, [pokemonId]);
 
   return (
-    <div className="pokemon-modal">
-      <div className="pokemon-modal-image">
+    <div className="pokemon-page">
+      <div className="pokemon-page-image">
         {pokemonDetails && pokemonDetails.sprites && (
           <img
             src={pokemonDetails.sprites.front_default}
