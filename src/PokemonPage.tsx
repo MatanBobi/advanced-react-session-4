@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { fetchData } from "./helpers/data";
+import { use } from "./hooks/use";
 
-export function PokemonPage() {
+function PokemonPage() {
   const { pokemonId } = useParams<{ pokemonId: string }>();
-  const [pokemonDetails, setPokemonDetails] = useState<any>();
-
-  useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPokemonDetails(data);
-      });
-  }, [pokemonId]);
+  const pokemonDetails = use(
+    fetchData(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
+  );
 
   return (
     <div className="pokemon-page">
@@ -31,3 +27,5 @@ export function PokemonPage() {
     </div>
   );
 }
+
+export default PokemonPage;

@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { matchSorter } from "match-sorter";
 import { Header } from "./Header";
 import { PokemonItem } from "./PokemonItem";
 import { Pokemon } from "./types";
 import { useNetworkStatus } from "./useNetworkStatus";
+import { use } from "./hooks/use";
+import { fetchData } from "./helpers/data";
+import { Spinner } from "./Spinner/Spinner";
 
 export function PokemonsContainer() {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [caughtPokemons, setCaughtPokemons] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { isOnline } = useNetworkStatus();
 
-  useEffect(() => {
-    async function getPokemons() {
-      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
-      const data = await res.json();
-      setPokemons(data.results);
-    }
-
-    getPokemons();
-  }, []);
+  const data = use(fetchData("https://pokeapi.co/api/v2/pokemon?limit=151"));
+  const pokemons: Pokemon[] = data.results;
 
   const visiblePokemons = React.useMemo(() => {
     return pokemons.length
@@ -55,12 +50,13 @@ export function PokemonsContainer() {
       <>
         {visiblePokemons.map((pokemon) => {
           return (
-            <PokemonItem
-              key={pokemon.name}
-              pokemon={pokemon}
-              onChange={handlePokemonCaught}
-              isCaught={caughtPokemons.includes(pokemon)}
-            />
+            <Suspense key={pokemon.name} fallback={<Spinner />}>
+              <PokemonItem
+                pokemon={pokemon}
+                onChange={handlePokemonCaught}
+                isCaught={caughtPokemons.includes(pokemon)}
+              />
+            </Suspense>
           );
         })}
       </>

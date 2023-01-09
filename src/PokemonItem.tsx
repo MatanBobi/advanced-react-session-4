@@ -1,6 +1,7 @@
 import { Pokemon } from "./types";
-import { memo } from "react";
-import { Link } from "react-router-dom";
+import { memo, useTransition } from "react";
+import { useHistory } from "react-router-dom";
+import { Spinner } from "./Spinner/Spinner";
 
 export const PokemonItem = memo(function ({
   pokemon,
@@ -11,9 +12,20 @@ export const PokemonItem = memo(function ({
   onChange: (pokemon: Pokemon, caught: boolean) => void;
   isCaught: boolean;
 }) {
+  const history = useHistory();
+  const [isPending, startTransition] = useTransition();
+
   return (
     <div className="pokemon-row">
-      <Link to={`/pokemon/${pokemon.name}`}>{pokemon.name}</Link>
+      <div
+        onClick={() => {
+          startTransition(() => {
+            history.push(`/pokemon/${pokemon.name}`);
+          });
+        }}
+      >
+        {pokemon.name}
+      </div>
       <input
         type="checkbox"
         checked={isCaught}
@@ -21,6 +33,7 @@ export const PokemonItem = memo(function ({
           onChange(pokemon, !isCaught);
         }}
       />
+      {isPending ? <Spinner /> : null}
     </div>
   );
 });
