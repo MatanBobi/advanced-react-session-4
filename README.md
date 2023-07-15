@@ -1,5 +1,7 @@
 # Advanced React Session 4
 
+To start, run `npm install` and then `npm run dev`.
+
 ## Step 1
 
 Add `Suspense` in order to lazy load the `PokemonPage` component.  
