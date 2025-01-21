@@ -1,17 +1,12 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { fetchData } from "./helpers/data";
 
-export function PokemonPage() {
+export default function PokemonPage() {
   const { pokemonName } = useParams<{ pokemonName: string }>();
-  const [pokemonDetails, setPokemonDetails] = useState<any>();
-
-  useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setPokemonDetails(data);
-      });
-  }, [pokemonName]);
+  const pokemonDetails = use<any>(
+    fetchData(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+  );
 
   return (
     <div className="h-full flex flex-col items-center justify-center">

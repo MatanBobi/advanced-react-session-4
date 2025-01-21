@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { matchSorter } from "match-sorter";
 import { Header } from "./Header";
 import { PokemonItem } from "./PokemonItem";
 import { Pokemon } from "./types";
 import { useNetworkStatus } from "./useNetworkStatus";
+import { fetchData } from "./helpers/data";
 
 export function Pokemons() {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
+  const data = use<{ results: Pokemon[] }>(
+    fetchData("https://pokeapi.co/api/v2/pokemon?limit=151")
+  );
+  const pokemons = data.results;
   const [caughtPokemons, setCaughtPokemons] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { isOnline } = useNetworkStatus();
-
-  useEffect(() => {
-    async function getPokemons() {
-      const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
-      const data = await res.json();
-      setPokemons(data.results);
-    }
-
-    getPokemons();
-  }, []);
 
   const visiblePokemons = React.useMemo(() => {
     return pokemons.length
