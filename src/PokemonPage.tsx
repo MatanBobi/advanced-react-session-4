@@ -2,20 +2,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export function PokemonPage() {
-  const { pokemonId } = useParams<{ pokemonId: string }>();
+  const { pokemonName } = useParams<{ pokemonName: string }>();
   const [pokemonDetails, setPokemonDetails] = useState<any>();
 
   useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
       .then((res) => res.json())
       .then((data) => {
         setPokemonDetails(data);
       });
-  }, [pokemonId]);
+  }, [pokemonName]);
 
   return (
-    <div className="pokemon-page">
-      <div className="pokemon-page-image">
+    <div className="h-full flex flex-col items-center justify-center">
+      <div>
         {pokemonDetails && pokemonDetails.sprites && (
           <img
             src={pokemonDetails.sprites.front_default}
@@ -24,7 +24,7 @@ export function PokemonPage() {
         )}
       </div>
       <div>
-        <h1>{pokemonDetails?.name}</h1>
+        <h1 className="capitalize">{pokemonDetails?.name}</h1>
         <p>Height: {pokemonDetails?.height}</p>
         <p>Weight: {pokemonDetails?.weight}</p>
       </div>

@@ -5,7 +5,7 @@ import { PokemonItem } from "./PokemonItem";
 import { Pokemon } from "./types";
 import { useNetworkStatus } from "./useNetworkStatus";
 
-export function PokemonsContainer() {
+export function Pokemons() {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [caughtPokemons, setCaughtPokemons] = useState<Pokemon[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,7 +45,7 @@ export function PokemonsContainer() {
   );
 
   return (
-    <div>
+    <div className="max-h-screen flex flex-col border-r border-r-slate-300 dark:border-r-slate-600 dark:bg-gray-800 overflow-auto">
       <Header
         caughtPokemonsLength={caughtPokemons.length}
         pokemonsLength={pokemons.length}

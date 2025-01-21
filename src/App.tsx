@@ -1,17 +1,15 @@
-import { PokemonsContainer } from "./PokemonsContainer";
-import { Route, Switch } from "react-router-dom";
+import { Pokemons } from "./Pokemons";
+import { Outlet } from "react-router-dom";
 import { NetworkStatusProvider } from "./NetworkStatusProvider";
 import "./App.css";
 import { PokemonPage } from "./PokemonPage";
 
 function App() {
   return (
-    <div className="App">
+    <div className="layout dark:bg-gray-800  dark:text-white h-full">
       <NetworkStatusProvider>
-        <Switch>
-          <Route path="/pokemon/:pokemonId" component={PokemonPage} />
-          <Route path="/" component={PokemonsContainer} />
-        </Switch>
+        <Pokemons />
+        <Outlet />
       </NetworkStatusProvider>
     </div>
   );
