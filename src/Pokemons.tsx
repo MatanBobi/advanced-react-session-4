@@ -45,14 +45,14 @@ export function Pokemons() {
   );
 
   return (
-    <div className="max-h-screen flex flex-col border-r border-r-slate-300 dark:border-r-slate-600 dark:bg-gray-800 overflow-auto">
+    <div className="max-h-screen flex flex-col border-r border-r-slate-200 dark:border-r-gray-700 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm overflow-auto pretty-scroll">
       <Header
         caughtPokemonsLength={caughtPokemons.length}
         pokemonsLength={pokemons.length}
         searchTerm={searchTerm}
         onChangeSearch={setSearchTerm}
       />
-      <>
+      <div className="flex flex-col py-2">
         {visiblePokemons.map((pokemon) => {
           return (
             <PokemonItem
@@ -63,7 +63,18 @@ export function Pokemons() {
             />
           );
         })}
-      </>
+        {pokemons.length > 0 && visiblePokemons.length === 0 && (
+          <div className="px-6 py-10 text-center text-sm text-slate-500 dark:text-gray-400">
+            No Pokémon match your search.
+          </div>
+        )}
+        {pokemons.length === 0 && (
+          <div className="flex flex-col items-center justify-center gap-3 py-10 text-slate-400 dark:text-gray-500">
+            <div className="w-10 h-10 rounded-full border-4 border-slate-200 border-t-red-500 animate-spin dark:border-gray-700 dark:border-t-red-500" />
+            <span className="text-sm">Loading Pokémon...</span>
+          </div>
+        )}
+      </div>
       {!isOnline ? (
         <div
           className="network-status-message"

@@ -6,7 +6,7 @@ import { PokemonPage } from "./PokemonPage";
 
 function App() {
   return (
-    <div className="layout dark:bg-gray-800  dark:text-white h-full">
+    <div className="layout dark:bg-gray-900 dark:text-white text-slate-800 h-full">
       <NetworkStatusProvider>
         <Pokemons />
         <Outlet />
