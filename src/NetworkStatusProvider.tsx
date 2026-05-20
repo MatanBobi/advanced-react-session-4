@@ -14,11 +14,9 @@ export function NetworkStatusProvider(props: NetworkStatusProviderProps) {
 
   useEffect(() => {
     const setOnline = () => {
-      debugger;
       setIsOnline(true);
     };
     const setOffline = () => {
-      debugger;
       setIsOnline(false);
     };
 
